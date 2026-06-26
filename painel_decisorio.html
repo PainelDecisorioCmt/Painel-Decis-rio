@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Decisório — Movimento Retrógrado · RC Mec</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface-alt: #f9f8f6;
+    --border: rgba(0,0,0,0.10);
+    --border-strong: rgba(0,0,0,0.18);
+    --text-primary: #1a1a18;
+    --text-secondary: #5a5a56;
+    --text-muted: #9a9a94;
+    --accent: #185fa5;
+    --accent-bg: #e6f1fb;
+    --accent-border: #b5d4f4;
+    --accent-text: #0c447c;
+    --success-bg: #eaf3de;
+    --success-border: #c0dd97;
+    --success-text: #3b6d11;
+    --danger-bg: #fcebeb;
+    --danger-border: #f7c1c1;
+    --danger-text: #a32d2d;
+    --radius: 8px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .wrap { max-width: 680px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 2.5rem; }
+  .header-badge {
+    display: inline-block;
+    background: var(--accent-bg);
+    border: 0.5px solid var(--accent-border);
+    color: var(--accent-text);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+  }
+  .header h1 { font-size: 26px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+  .header p { font-size: 14px; color: var(--text-secondary); }
+
+  .progress-wrap { margin-bottom: 8px; }
+  .progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-fill {
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.35s ease;
+    width: 0%;
+  }
+
+  .trail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 28px;
+    margin-bottom: 1.25rem;
+  }
+  .crumb {
+    font-size: 11px;
+    background: var(--surface);
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 3px 10px;
+    color: var(--text-secondary);
+  }
+
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border-strong);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.1px;
+    margin-bottom: 12px;
+  }
+  .card-question {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .card-hint {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+  }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-row.col { flex-direction: column; }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border: 0.5px solid;
+    transition: opacity 0.15s, background 0.15s;
+    text-align: left;
+  }
+  button:hover { opacity: 0.85; }
+
+  .btn-sim {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+    color: var(--success-text);
+  }
+  .btn-nao {
+    background: var(--danger-bg);
+    border-color: var(--danger-border);
+    color: var(--danger-text);
+  }
+  .btn-opt {
+    background: var(--surface-alt);
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+  .btn-opt:hover { background: var(--bg); }
+
+  .result-badge {
+    display: inline-block;
+    background: var(--accent-bg);
+    border: 0.5px solid var(--accent-border);
+    color: var(--accent-text);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+  }
+  .result-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+  }
+  .result-criteria {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    background: var(--surface-alt);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+  .result-criteria strong { color: var(--text-primary); display: block; margin-bottom: 10px; }
+  .result-criteria em { color: var(--text-muted); font-style: normal; display: block; margin-top: 10px; font-size: 13px; }
+
+  .result-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  .btn-word {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .btn-word:hover { opacity: 0.88; }
+  .btn-word svg { flex-shrink: 0; }
+
+  .btn-restart {
+    background: var(--surface-alt);
+    border-color: var(--border-strong);
+    color: var(--text-secondary);
+  }
+  .btn-restart:hover { background: var(--bg); opacity: 1; }
+
+  .divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 2rem 0;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 2.5rem;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 1rem 0.75rem; }
+    .card { padding: 1.25rem 1.25rem; }
+    .card-question { font-size: 16px; }
+    .btn-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-badge">16º RC Mec · NPOR 2026</div>
+    <h1>Painel Decisório</h1>
+    <p>Apoio à tomada de Decisão de Conduta · Movimento Retrógrado · RC Mec</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="pbar"></div></div>
+  </div>
+
+  <div class="trail" id="trail"></div>
+
+  <!-- PASSO 1 -->
+  <div class="step active" id="s0">
+    <div class="card">
+      <div class="card-label">Passo 1 · Situação geral</div>
+      <div class="card-question">Algum elemento em 1º escalão está perdendo poder de combate de forma significativa?</div>
+      <div class="card-hint">Considere degradação de efetivo, viaturas ou pressão inimiga que comprometa a capacidade de cumprir a missão no tempo e posição previstos.</div>
+      <div class="btn-row">
+        <button class="btn-sim" onclick="go('s1','Degradação confirmada')">Sim — há degradação</button>
+        <button class="btn-nao" onclick="go('s_flancocheck','Sem degradação')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLANCO CHECK (sem degradação) -->
+  <div class="step" id="s_flancocheck">
+    <div class="card">
+      <div class="card-label">Passo 2 · Ameaça de flanco</div>
+      <div class="card-question">Existe ameaça inimiga em flanco exposto ou não previsto no planejamento?</div>
+      <div class="card-hint">Ameaça lateral que pode comprometer toda a ação retardadora se não contida imediatamente.</div>
+      <div class="btn-row">
+        <button class="btn-sim" onclick="go('resultado_bloqueio','Ameaça de flanco')">Sim — ameaça no flanco</button>
+        <button class="btn-nao" onclick="go('s_pressao','Sem ameaça de flanco')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRESSÃO -->
+  <div class="step" id="s_pressao">
+    <div class="card">
+      <div class="card-label">Passo 2 · Pressão inimiga</div>
+      <div class="card-question">A força está sendo pressionada além do previsto, com risco de não ganhar o tempo necessário na posição?</div>
+      <div class="card-hint">O inimigo avança com força e o planejamento de posições não comporta o ritmo atual de progressão.</div>
+      <div class="btn-row">
+        <button class="btn-sim" onclick="go('resultado_retraimento','Pressão além do previsto')">Sim — pressão crítica</button>
+        <button class="btn-nao" onclick="go('s_catq','Sem pressão crítica')">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPO DE DEGRADAÇÃO -->
+  <div class="step" id="s1">
+    <div class="card">
+      <div class="card-label">Passo 2 · Tipo de degradação</div>
+      <div class="card-question">A degradação ocorreu em toda a Subunidade (SU) ou apenas em pelotões isolados?</div>
+      <div class="card-hint">Pelotão degradado aponta para Reforço. SU inteira comprometida aponta para Substituição.</div>
+      <div class="btn-row col">
+        <button class="btn-opt" onclick="go('s2_su','SU inteira degradada')">A SU inteira está degradada e sem condições de prosseguir a missão</button>
+        <button class="btn-opt" onclick="go('resultado_reforco','Pelotão(ões) degradado(s)')">Apenas um ou mais pelotões estão degradados — a SU ainda opera</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESERVA DISPONÍVEL? -->
+  <div class="step" id="s2_su">
+    <div class="card">
+      <div class="card-label">Passo 3 · Condição da reserva</div>
+      <div class="card-question">A reserva do Regimento tem condições de assumir a missão da SU degradada?</div>
+      <div class="card-hint">A SU reserva deve estar em condições de assumir a zona de ação da SU substituída e prosseguir a missão imediatamente.</div>
+      <div class="btn-row">
+        <button class="btn-sim" onclick="go('resultado_substituicao','Reserva disponível')">Sim — reserva disponível</button>
+        <button class="btn-nao" onclick="go('resultado_retraimento','Reserva sem condições')">Não — reserva sem condições</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTRA-ATAQUE? -->
+  <div class="step" id="s_catq">
+    <div class="card">
+      <div class="card-label">Passo 3 · Necessidade de contra-ataque</div>
+      <div class="card-question">Existe necessidade de contra-atacar para manter o plano e a missão?</div>
+      <div class="card-hint">O inimigo penetrou na posição, engajou decisivamente um elemento, ou está se preparando para atacar.</div>
+      <div class="btn-row">
+        <button class="btn-sim" onclick="go('s_catype','Contra-ataque necessário')">Sim — contra-ataque necessário</button>
+        <button class="btn-nao" onclick="go('resultado_retraimento','C Atq inviável — retraimento')">Não — retraimento necessário</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPO DE CONTRA-ATAQUE -->
+  <div class="step" id="s_catype">
+    <div class="card">
+      <div class="card-label">Passo 4 · Tipo de contra-ataque</div>
+      <div class="card-question">Qual situação específica demanda o contra-ataque?</div>
+      <div class="card-hint">Selecione a que melhor descreve a situação atual no campo.</div>
+      <div class="btn-row col">
+        <button class="btn-opt" onclick="go('resultado_ca_desaf','Elemento cerradamente engajado')">Elemento amigo cerradamente engajado — necessário romper contato</button>
+        <button class="btn-opt" onclick="go('resultado_ca_rest','Inimigo penetrou na posição')">Inimigo penetrou na posição — necessário restabelecer o LAADA</button>
+        <button class="btn-opt" onclick="go('resultado_ca_desorg','Inimigo se prepara para atacar')">Inimigo se prepara para atacar — desorganizar antes do ataque</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESULTADOS ==================== -->
+
+  <div class="step" id="resultado_retraimento">
+    <div class="card">
+      <div class="result-badge">Decisão de Conduta</div>
+      <div class="result-title">Retraimento</div>
+      <div class="result-criteria">
+        <strong>Fundamento doutrinário e critérios:</strong>
+        O retraimento é adotado quando a força retardadora está sob pressão além do previsto, quando o tempo na posição não pode mais ser ganho, ou quando a reserva não tem condições de atuar. Requer autorização do escalão superior (O do Esc Sup para Ret). É realizado geralmente com pressão inimiga, podendo ser para a Linha de Controle seguinte ou para a próxima Posição.
+        <em>Referência: EB70-MC-10.354 — RC Mec (2020), pg 3-19. Indicador: "Desde já" ou "Mediante Ordem" conforme previsto no planejamento.</em>
+      </div>
+      <div class="result-actions">
+        <a class="btn-word" href="DC_Retraimento.docx" download="DC_Retraimento.docx">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esqueleto Word — Retraimento
+        </a>
+        <button class="btn-restart" onclick="restart()">Reiniciar fluxo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="resultado_bloqueio">
+    <div class="card">
+      <div class="result-badge">Decisão de Conduta</div>
+      <div class="result-title">Bloqueio</div>
+      <div class="result-criteria">
+        <strong>Fundamento doutrinário e critérios:</strong>
+        O bloqueio é empregado para interditar um ponto de passagem ou via diante de ameaça em flanco exposto ou não previsto. No RC Mec, o método mais adequado é pela ocupação com tropa e realização de fogos diretos. Um elemento de combate da reserva é empregado para barrar o avanço inimigo pelo flanco, protegendo a força principal em movimento retrógrado.
+        <em>Referência: EB20-MF-03.109 — Glossário de Termos e Expressões Militares (2018). Geralmente para barrar ameaça em flanco exposto ou ameaça não prevista no planejamento.</em>
+      </div>
+      <div class="result-actions">
+        <a class="btn-word" href="DC_Bloqueio.docx">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esqueleto Word — Bloqueio
+        </a>
+        <button class="btn-restart" onclick="restart()">Reiniciar fluxo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="resultado_reforco">
+    <div class="card">
+      <div class="result-badge">Decisão de Conduta</div>
+      <div class="result-title">Reforço</div>
+      <div class="result-criteria">
+        <strong>Fundamento doutrinário e critérios:</strong>
+        O reforço é empregado quando um ou mais pelotões de uma SU em 1º escalão perderam poder de combate, mas a SU ainda pode cumprir a missão com recomposição. A reserva fornece o(s) pelotão(ões) à SU degradada, e o(s) pelotão(ões) degradado(s) passa(m) para a reserva da Unidade para reorganização. A decisão é do Cmt Rgt, baseada nos fatores da decisão e no grau de degradação.
+        <em>Referência: EB60-ME-11.401 — Dados Médios de Planejamento (2017). Entre 70 e 50% do efetivo: conduz Def A em posição organizada.</em>
+      </div>
+      <div class="result-actions">
+        <a class="btn-word" href="DC_Reforco.docx">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esqueleto Word — Reforço
+        </a>
+        <button class="btn-restart" onclick="restart()">Reiniciar fluxo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="resultado_substituicao">
+    <div class="card">
+      <div class="result-badge">Decisão de Conduta</div>
+      <div class="result-title">Substituição</div>
+      <div class="result-criteria">
+        <strong>Fundamento doutrinário e critérios:</strong>
+        A substituição é empregada quando uma SU inteira em 1º escalão está degradada e não tem condições de prosseguir a missão. A SU reserva assume a missão da SU substituída, incluindo sua zona de ação. A SU substituída passa a atuar como reserva do Regimento para reorganização. Difere do Reforço pois troca a SU como um todo — não apenas pelotões.
+        <em>Referência: EB70-MC-10.354 — RC Mec (2020). A substituição troca a SU inteira; o Reforço atua ao nível de pelotão.</em>
+      </div>
+      <div class="result-actions">
+        <a class="btn-word" href="DC_Substituicao.docx">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esqueleto Word — Substituição
+        </a>
+        <button class="btn-restart" onclick="restart()">Reiniciar fluxo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="resultado_ca_desaf">
+    <div class="card">
+      <div class="result-badge">Decisão de Conduta</div>
+      <div class="result-title">Contra-ataque de desaferramento</div>
+      <div class="result-criteria">
+        <strong>Fundamento doutrinário e critérios:</strong>
+        Empregado quando um elemento amigo está cerradamente engajado pelo inimigo e precisa ser desengajado para prosseguir o movimento retrógrado. A ação consiste em um golpe contra um flanco do inimigo, justamente à retaguarda de seus elementos mais avançados. Esta operação não terá objetivo no terreno. Embora típico dos movimentos retrógrados, também é utilizado na Def Mv.
+        <em>Referência: EB70-MC-10.354 — RC Mec (2020). Atenção: as demais SU também estarão sob pressão durante a execução do contra-ataque. O P Lig estabelecido é apenas para o retraimento posterior.</em>
+      </div>
+      <div class="result-actions">
+        <a class="btn-word" href="DC_CAtq_Desaferramento.docx">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esqueleto Word — C Atq Desaferramento
+        </a>
+        <button class="btn-restart" onclick="restart()">Reiniciar fluxo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="resultado_ca_rest">
+    <div class="card">
+      <div class="result-badge">Decisão de Conduta</div>
+      <div class="result-title">Contra-ataque de restabelecimento de posição</div>
+      <div class="result-criteria">
+        <strong>Fundamento doutrinário e critérios:</strong>
+        Empregado quando o inimigo penetrou em uma parte da posição, rompendo o LAADA. O objetivo é restabelecer a posição pela destruição ou expulsão dos elementos inimigos que penetraram na ADA. O contra-ataque deve ser desencadeado quando o inimigo estiver mais vulnerável, de modo a impedi-lo de retomar a progressão ou receber reforços.
+        <em>Referência: EB70-MC-10.202 — Operações Ofensivas e Defensivas (2017) e EB70-MC-10.354 — RC Mec (2020). Todas as considerações relativas a um Atq aplicam-se ao C Atq — ênfase na hora de desencadeamento.</em>
+      </div>
+      <div class="result-actions">
+        <a class="btn-word" href="DC_CAtq_Restabelecimento.docx">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esqueleto Word — C Atq Restabelecimento
+        </a>
+        <button class="btn-restart" onclick="restart()">Reiniciar fluxo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="resultado_ca_desorg">
+    <div class="card">
+      <div class="result-badge">Decisão de Conduta</div>
+      <div class="result-title">Contra-ataque de desorganização</div>
+      <div class="result-criteria">
+        <strong>Fundamento doutrinário e critérios:</strong>
+        Empregado quando o inimigo está se preparando para atacar. Tem por finalidade impedir ou retardar o ataque inimigo antes que ele se desencadeie. É realizado por uma força defensora contra forças inimigas que se preparam para um ataque, buscando desorganizar sua formação e quebrar o ritmo ofensivo antes do contato.
+        <em>Referência: EB70-MC-10.202 — Operações Ofensivas e Defensivas (2017). Ação proativa — executada antes que o inimigo desencadeie seu ataque.</em>
+      </div>
+      <div class="result-actions">
+        <a class="btn-word" href="DC_CAtq_Desorganizacao.docx">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esqueleto Word — C Atq Desorganização
+        </a>
+        <button class="btn-restart" onclick="restart()">Reiniciar fluxo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="footer">
+    Painel Decisório · Movimento Retrógrado · RC Mec<br>
+    Base doutrinária: EB70-MC-10.354 (2020) · EB70-MC-10.309 (2019) · EB70-MC-10.202 (2017) · EB70-MC-10.211 (2020) · EB60-ME-11.401 (2017)<br>
+    <strong>Para uso como ferramenta de apoio à decisão — não substitui o julgamento do comandante.</strong>
+  </div>
+
+</div>
+
+<script>
+var hist = [];
+var stepWeight = {
+  's0':1,'s_flancocheck':2,'s_pressao':2,'s1':2,'s2_su':3,'s_catq':3,'s_catype':4,
+  'resultado_retraimento':5,'resultado_bloqueio':5,'resultado_reforco':5,
+  'resultado_substituicao':5,'resultado_ca_desaf':5,'resultado_ca_rest':5,'resultado_ca_desorg':5
+};
+
+function go(id, label) {
+  document.querySelector('.step.active').classList.remove('active');
+  hist.push({ id: id, label: label });
+  document.getElementById(id).classList.add('active');
+  renderTrail();
+  renderProgress(id);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderTrail() {
+  var t = document.getElementById('trail');
+  t.innerHTML = '';
+  hist.forEach(function(h) {
+    var s = document.createElement('span');
+    s.className = 'crumb';
+    s.textContent = h.label;
+    t.appendChild(s);
+  });
+}
+
+function renderProgress(id) {
+  var step = stepWeight[id] || 1;
+  var pct = Math.round((step / 5) * 100);
+  document.getElementById('pbar').style.width = pct + '%';
+}
+
+function restart() {
+  hist = [];
+  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('s0').classList.add('active');
+  document.getElementById('trail').innerHTML = '';
+  document.getElementById('pbar').style.width = '0%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
