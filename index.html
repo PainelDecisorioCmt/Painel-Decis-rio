@@ -277,10 +277,11 @@
     <div class="card">
       <div class="card-label">Intervenção pelos Fogos · Passo 4</div>
       <div class="card-question">É necessário mudar a prioridade de apoio de fogo do Regimento?</div>
-      <div class="card-hint">A intervenção pelos fogos ocorre quando a região sob maior pressão não está com prioridade de fogo do Rgt.<br><br><strong>Atenção:</strong> se a região que sofre pressão já tem prioridade, a intervenção pelos fogos não agrega — avance para a próxima verificação.</div>
-      <div class="btn-row">
-        <button class="btn-sim" onclick="go('resultado_fogos','Mudança de prioridade de fogos')">Sim — mudar prioridade de fogos</button>
-        <button class="btn-nao" onclick="go('s_laada','Fogos sem alteração')">Não — verificar reserva</button>
+      <div class="card-hint">A intervenção pelos fogos ocorre quando a região sob maior pressão não está com prioridade de fogo do Rgt. Avalie se além da mudança de prioridade também é necessário empregar a reserva simultaneamente.</div>
+      <div class="btn-row col">
+        <button class="btn-sim" onclick="go('resultado_fogos','Apenas mudança de prioridade de fogos')">Sim, apenas mudar prioridade de fogos</button>
+        <button class="btn-sim" onclick="go('resultado_fogos_reserva','Mudar prioridade de fogos e empregar a reserva')">Sim, mudar prioridade de fogos e empregar a reserva</button>
+        <button class="btn-nao" onclick="go('s_laada','Prioridade de fogos já está correta')">Não, a prioridade já está na zona de pressão</button>
       </div>
     </div>
   </div>
@@ -288,7 +289,7 @@
   <div class="step" id="s_laada">
     <div class="card">
       <div class="card-label">Intervenção pela Reserva · Passo 5</div>
-      <div class="card-question">O inimigo rompeu obstáculos, adentrou o LAADA ou ultrapassou a linha de defesa?</div>
+      <div class="card-question">O inimigo rompeu obstáculos, adentrou o LAADA ou ultrapassou a linha de contato?</div>
       <div class="card-hint">Qualquer uma dessas condições exige intervenção pela reserva do Regimento imediatamente.</div>
       <div class="doc-box"><strong>Referência · EB70-MC-10.354, 4.3.9.11.5</strong>A reserva do regimento é empregada para contra-atacar, desengajar elemento decisivamente engajado, eliminar penetração inimiga, bloquear ameaça à frente ou nos flancos, cobrir o retraimento ou reforçar elementos da força retardadora.</div>
       <div class="btn-row">
@@ -329,11 +330,12 @@
   <div class="step" id="s_tipo_deg">
     <div class="card">
       <div class="card-label">Decisão de Conduta · Passo 8</div>
-      <div class="card-question">A degradação atingiu toda a Subunidade ou apenas pelotão(ões)?</div>
-      <div class="card-hint">Pelotão(ões) degradado(s): Reforço. SU inteira comprometida: verificar Substituição.</div>
+      <div class="card-question">A degradação atingiu toda a Subunidade ou a SU perdeu a capacidade de exercer comando e controle?</div>
+      <div class="card-hint">Pelotão(ões) degradado(s): Reforço. SU inteira comprometida ou sem capacidade de comando e controle: verificar Substituição.</div>
       <div class="btn-row col">
         <button class="btn-opt" onclick="go('resultado_reforco','Pelotão(ões) degradado(s)')">Apenas pelotão(ões), a SU ainda opera</button>
-        <button class="btn-opt" onclick="go('s_reserva_disp','SU inteira degradada')">SU inteira comprometida</button>
+        <button class="btn-opt" onclick="go('s_reserva_disp','SU inteira comprometida')">SU inteira comprometida</button>
+        <button class="btn-opt" onclick="go('s_reserva_disp','SU perdeu capacidade de C2')">A SU perdeu a capacidade de exercer comando e controle</button>
       </div>
     </div>
   </div>
@@ -430,11 +432,28 @@
       <div class="result-title">Mudança de Prioridade de Apoio de Fogo</div>
       <div class="result-criteria">
         <strong>Fundamento e critérios:</strong>
-        A intervenção pelos fogos é realizada quando a região sob maior pressão não está com prioridade de fogo do Regimento. O Cmt redireciona o apoio de fogo para a SU mais pressionada, alterando a prescrição de prioridade na decisão de conduta. Não implica necessariamente emprego da reserva.
-        <em>Esta ação pode ser combinada com outras decisões de conduta se a situação exigir intervenção simultânea pela reserva.</em>
+        A intervenção pelos fogos é realizada quando a região sob maior pressão não está com prioridade de fogo do Regimento. O Cmt redireciona o apoio de fogo para a SU mais pressionada, alterando a prescrição de prioridade na decisão de conduta. Não implica emprego da reserva.
+        <em>Esta ação encerra a intervenção. Registre a mudança de prioridade na decisão de conduta e prossiga com avaliação contínua.</em>
       </div>
       <div class="result-actions">
         <button class="btn-restart" onclick="restart()">Reiniciar avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="resultado_fogos_reserva">
+    <div class="card">
+      <div class="result-badge">Intervenção pelos Fogos + Reserva</div>
+      <div class="result-title">Mudança de Prioridade de Fogos e Emprego da Reserva</div>
+      <div class="result-criteria">
+        <strong>Fundamento e critérios:</strong>
+        Situação que exige intervenção simultânea pelos fogos e pela reserva. O Cmt redistribui a prioridade de apoio de fogo para a zona de maior pressão e ao mesmo tempo emprega a reserva para fazer face à situação no terreno. As duas ações são registradas na mesma decisão de conduta.<br><br>
+        <strong>Atenção:</strong> prossiga pelo fluxo abaixo para determinar qual decisão de conduta se aplica ao emprego da reserva nesta situação.
+        <em>Registre a mudança de prioridade de fogos no parágrafo 3 da decisão de conduta que for selecionada.</em>
+      </div>
+      <div class="result-actions">
+        <button class="btn-sim" onclick="go('s_engajado','Continuando — emprego da reserva')">Continuar para emprego da reserva</button>
+        <button class="btn-restart" onclick="restart()">Reiniciar</button>
       </div>
     </div>
   </div>
@@ -604,7 +623,7 @@
     Painel Decisório · 16º RC Mec · Movimento Retrógrado<br>
     Base doutrinária: EB70-MC-10.354 (2020) · EB70-MC-10.309 (2019) · EB70-MC-10.202 (2017) · EB70-MC-10.211 (2020) · EB60-ME-11.401 (2017)<br>
     Ferramenta de apoio à decisão, não substitui o julgamento do comandante.<br><br>
-    <strong>© Cap Paulo Victor Gomes Loquente Monteiro e Cap Henrique Garlet Araujo — Criadores do Painel Decisório</strong>
+    <strong>© Cap Paulo Vítor Gomes Loquente Monteiro e Cap Henrique Garlet Araujo — Criadores do Painel Decisório</strong>
   </div>
 
 </div>
@@ -629,7 +648,7 @@ var stepWeight = {
   's_fogos':4,'s_laada':5,'s_engajado':6,'s_degradacao':7,
   's_tipo_deg':8,'s_reserva_disp':9,'s_penetrou':8,'s_flanco':9,'s_desorg':10,'s_ca_tipo':9,
   'fim_plano':10,'fim_variante':10,
-  'resultado_fogos':10,'resultado_reforco':10,'resultado_substituicao':10,
+  'resultado_fogos':10,'resultado_fogos_reserva':5,'resultado_reforco':10,'resultado_substituicao':10,
   'resultado_bloqueio':10,'resultado_retraimento':10,
   'resultado_ca_desaf':10,'resultado_ca_rest':10,'resultado_ca_destruicao':10,'resultado_ca_desorg':10
 };
@@ -674,7 +693,7 @@ function atualizarUI() {
     's_degradacao':'Degradação?','s_tipo_deg':'SU ou Pel?','s_reserva_disp':'Reserva?',
     's_penetrou':'Penetrou?','s_flanco':'Flanco?','s_desorg':'Desorganizar?','s_ca_tipo':'Tipo C Atq',
     'fim_plano':'Manter plano','fim_variante':'Decisão de Execução',
-    'resultado_fogos':'Fogos','resultado_reforco':'Reforço','resultado_substituicao':'Substituição',
+    'resultado_fogos':'Apenas Fogos','resultado_fogos_reserva':'Fogos + Reserva','resultado_reforco':'Reforço','resultado_substituicao':'Substituição',
     'resultado_bloqueio':'Bloqueio','resultado_retraimento':'Retraimento',
     'resultado_ca_desaf':'C Atq Desaferramento','resultado_ca_rest':'C Atq Restabelecimento',
     'resultado_ca_destruicao':'C Atq Destruição','resultado_ca_desorg':'C Atq Desorganização'
