@@ -19,30 +19,31 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 2rem 1rem; }
   .wrap { max-width: 680px; margin: 0 auto; }
 
-  /* HEADER */
   .header { text-align: center; margin-bottom: 2rem; }
   .header-badge { display: inline-block; background: var(--accent-bg); border: 0.5px solid var(--accent-border); color: var(--accent-text); font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; padding: 4px 14px; border-radius: var(--radius); margin-bottom: 12px; }
   .header h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
   .header p { font-size: 13px; color: var(--text-secondary); }
 
-  /* PROGRESS */
   .progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
   .progress-fill { height: 4px; background: var(--accent); border-radius: 2px; transition: width 0.35s ease; width: 0%; }
-  .trail { display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; margin-bottom: 1.25rem; }
+
+  /* TRILHA + NAVEGAÇÃO */
+  .nav-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; min-height: 32px; }
+  .btn-back { display: none; align-items: center; gap: 4px; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 5px 12px; font-size: 13px; font-weight: 500; color: var(--text-secondary); cursor: pointer; font-family: inherit; flex-shrink: 0; }
+  .btn-back.visible { display: flex; }
+  .btn-back:hover { background: var(--bg); }
+  .trail { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
   .crumb { font-size: 11px; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 3px 10px; color: var(--text-secondary); }
 
-  /* STEPS */
   .step { display: none; }
   .step.active { display: block; }
 
-  /* CARDS */
   .card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 12px; padding: 1.75rem 2rem; }
   .card-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.1px; margin-bottom: 12px; }
   .card-question { font-size: 18px; font-weight: 600; color: var(--text-primary); line-height: 1.45; margin-bottom: 8px; }
   .card-hint { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.75rem; }
   .card-hint strong { color: var(--text-primary); }
 
-  /* TELA INICIAL */
   .intro-card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
   .section-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
   .step-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
@@ -52,34 +53,29 @@
   .step-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
   .step-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
 
-  /* ESBOÇOS — links no passo 4 */
   .esboco-links { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
-  .esboco-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent); cursor: pointer; text-decoration: none; background: var(--accent-bg); border: 0.5px solid var(--accent-border); border-radius: var(--radius); padding: 5px 10px; width: fit-content; }
+  .esboco-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent); cursor: pointer; background: var(--accent-bg); border: 0.5px solid var(--accent-border); border-radius: var(--radius); padding: 5px 10px; width: fit-content; }
   .esboco-link:hover { opacity: 0.8; }
 
-  /* MODAL DE ESBOÇO */
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
   .modal-overlay.open { display: flex; }
   .modal-box { background: #fff; border-radius: 12px; max-width: 95vw; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
   .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 0.5px solid var(--border); }
   .modal-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
   .modal-close { background: var(--surface-alt); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--text-secondary); font-family: inherit; }
-  .modal-close:hover { background: var(--bg); }
   .modal-img { max-width: 100%; max-height: calc(90vh - 60px); object-fit: contain; display: block; }
 
-  /* TIPOS DE DECISÃO */
   .split-card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 12px; overflow: hidden; margin-bottom: 1.25rem; }
   .split-header { padding: 10px 1.25rem; border-bottom: 0.5px solid var(--border); font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
   .split-body { display: grid; grid-template-columns: 1fr 1fr; }
   .split-col { padding: 1rem; display: flex; flex-direction: column; gap: 6px; }
   .split-col:first-child { border-right: 0.5px solid var(--border); }
-  .split-tag { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius); display: inline-block; margin-bottom: 4px; }
+  .split-tag { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius); display: block; margin-bottom: 4px; text-align: center; }
   .tag-exec { background: var(--warn-bg); color: var(--warn-text); border: 0.5px solid var(--warn-border); }
   .tag-cond { background: var(--accent-bg); color: var(--accent-text); border: 0.5px solid var(--accent-border); }
   .split-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
   .split-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
 
-  /* BOTÕES */
   .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
   .btn-row.col { flex-direction: column; }
   button { font-family: inherit; cursor: pointer; border-radius: var(--radius); font-size: 14px; font-weight: 500; padding: 10px 22px; border: 0.5px solid; transition: opacity 0.15s; text-align: left; }
@@ -92,14 +88,10 @@
   .btn-start:hover { opacity: 0.88; }
   .btn-restart { background: var(--surface-alt); border-color: var(--border-strong); color: var(--text-secondary); }
 
-  /* DOC BOX */
   .doc-box { background: var(--accent-bg); border: 0.5px solid var(--accent-border); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 0.85rem 1rem; margin-bottom: 1.5rem; font-size: 13px; color: var(--accent-text); line-height: 1.6; }
   .doc-box strong { display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; }
-
-  /* REF BOX */
   .ref-box { background: var(--surface); border: 0.5px solid var(--border-strong); border-left: 3px solid var(--accent-border); border-radius: 0 var(--radius) var(--radius) 0; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
 
-  /* RESULTADO */
   .result-badge { display: inline-block; background: var(--accent-bg); border: 0.5px solid var(--accent-border); color: var(--accent-text); font-size: 11px; font-weight: 600; letter-spacing: 1.1px; text-transform: uppercase; padding: 4px 12px; border-radius: var(--radius); margin-bottom: 14px; }
   .result-title { font-size: 22px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; }
   .result-criteria { font-size: 14px; color: var(--text-secondary); line-height: 1.65; background: var(--surface-alt); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.25rem; margin-bottom: 1.75rem; }
@@ -109,7 +101,6 @@
   .btn-word { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; }
   .btn-word:hover { opacity: 0.88; }
 
-  /* FIM SEM DC */
   .end-card { background: var(--warn-bg); border: 0.5px solid var(--warn-border); border-radius: 12px; padding: 1.75rem 2rem; }
   .end-title { font-size: 20px; font-weight: 600; color: var(--warn-text); margin-bottom: 10px; }
   .end-card p { font-size: 14px; color: var(--warn-text); line-height: 1.6; margin-bottom: 1.25rem; }
@@ -134,17 +125,22 @@
   <div class="header">
     <div class="header-badge">16º RC Mec</div>
     <h1>Painel Decisório</h1>
-    <p>Apoio à tomada de Decisão de Conduta · Movimento Retrógrado</p>
   </div>
 
   <div class="progress-track"><div class="progress-fill" id="pbar"></div></div>
-  <div class="trail" id="trail"></div>
+
+  <div class="nav-bar">
+    <button class="btn-back" id="btn-back" onclick="voltar()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar
+    </button>
+    <div class="trail" id="trail"></div>
+  </div>
 
   <!-- ══════════════════════════════════════
        TELA INICIAL
   ══════════════════════════════════════ -->
   <div class="step active" id="s_home">
-
     <div class="section-label" style="margin-bottom:10px">Passo a passo, tomada de decisão de conduta</div>
     <div class="intro-card">
       <div class="step-row">
@@ -205,7 +201,7 @@
         <div class="step-num">5</div>
         <div>
           <div class="step-title">Redigir a decisão de conduta</div>
-          <div class="step-desc">Produzir o documento nos 5 parágrafos: Manobra, Ordem aos Subrd, Prioridade de Fogos, Reserva, Prescrições.</div>
+          <div class="step-desc">Produzir o documento nos 5 parágrafos: Manobra, Ordem aos Subordinados, Prioridade de Fogos, Reserva, Prescrições Diversas.</div>
         </div>
       </div>
     </div>
@@ -231,12 +227,11 @@
       Base doutrinária: EB70-MC-10.354 (2020) · EB70-MC-10.202 (2017) · EB70-MC-10.211, PPCOT (2020) · EB60-ME-11.401 (2017)<br>
       Ferramenta de apoio à decisão, não substitui o julgamento do comandante.
     </div>
-
-    <button class="btn-start" onclick="go('s_inicio','Iniciou avaliação')">Iniciar avaliação →</button>
+    <button class="btn-start" onclick="go('s_inicio','Iniciou avaliação')">Iniciar avaliação</button>
   </div>
 
   <!-- ══════════════════════════════════════
-       FASE 1 — AVALIAÇÃO INICIAL
+       AVALIAÇÃO INICIAL
   ══════════════════════════════════════ -->
   <div class="step" id="s_inicio">
     <div class="card">
@@ -276,13 +271,13 @@
   </div>
 
   <!-- ══════════════════════════════════════
-       FASE 2 — INTERVENÇÃO
+       INTERVENÇÃO
   ══════════════════════════════════════ -->
   <div class="step" id="s_fogos">
     <div class="card">
       <div class="card-label">Intervenção pelos Fogos · Passo 4</div>
       <div class="card-question">É necessário mudar a prioridade de apoio de fogo do Regimento?</div>
-      <div class="card-hint">A intervenção pelos fogos ocorre quando a região sob maior pressão não está com prioridade de fogo do Rgt, ou quando a prioridade atual precisa ser redistribuída.<br><br><strong>Atenção:</strong> se a região que sofre pressão já tem prioridade, a intervenção pelos fogos não agrega — avance para a próxima verificação.</div>
+      <div class="card-hint">A intervenção pelos fogos ocorre quando a região sob maior pressão não está com prioridade de fogo do Rgt.<br><br><strong>Atenção:</strong> se a região que sofre pressão já tem prioridade, a intervenção pelos fogos não agrega — avance para a próxima verificação.</div>
       <div class="btn-row">
         <button class="btn-sim" onclick="go('resultado_fogos','Mudança de prioridade de fogos')">Sim — mudar prioridade de fogos</button>
         <button class="btn-nao" onclick="go('s_laada','Fogos sem alteração')">Não — verificar reserva</button>
@@ -304,7 +299,7 @@
   </div>
 
   <!-- ══════════════════════════════════════
-       FASE 3 — DECISÃO DE CONDUTA
+       DECISÃO DE CONDUTA
   ══════════════════════════════════════ -->
   <div class="step" id="s_engajado">
     <div class="card">
@@ -404,7 +399,7 @@
   </div>
 
   <!-- ══════════════════════════════════════
-       FINS SEM DECISÃO DE CONDUTA
+       FINS SEM DC
   ══════════════════════════════════════ -->
   <div class="step" id="fim_plano">
     <div class="end-card">
@@ -608,12 +603,13 @@
   <div class="footer">
     Painel Decisório · 16º RC Mec · Movimento Retrógrado<br>
     Base doutrinária: EB70-MC-10.354 (2020) · EB70-MC-10.309 (2019) · EB70-MC-10.202 (2017) · EB70-MC-10.211 (2020) · EB60-ME-11.401 (2017)<br>
-    Ferramenta de apoio à decisão, não substitui o julgamento do comandante.
+    Ferramenta de apoio à decisão, não substitui o julgamento do comandante.<br><br>
+    <strong>© Cap Paulo Victor Gomes Loquente Monteiro e Cap Henrique Garlet Araujo — Criadores do Painel Decisório</strong>
   </div>
 
 </div>
 
-<!-- MODAL ESBOÇO -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modal" onclick="fecharModal(event)">
   <div class="modal-box">
     <div class="modal-header">
@@ -625,7 +621,9 @@
 </div>
 
 <script>
-var hist = [];
+// Histórico de navegação: array de IDs de steps
+var hist = ['s_home'];
+
 var stepWeight = {
   's_home':0,'s_inicio':1,'s_variante':2,'s_oportunidade':3,
   's_fogos':4,'s_laada':5,'s_engajado':6,'s_degradacao':7,
@@ -638,31 +636,64 @@ var stepWeight = {
 
 function go(id, label) {
   document.querySelector('.step.active').classList.remove('active');
-  if(label) hist.push({ id: id, label: label });
+  hist.push(id);
   document.getElementById(id).classList.add('active');
-  renderTrail();
-  var step = stepWeight[id] || 0;
-  document.getElementById('pbar').style.width = Math.round((step / 10) * 100) + '%';
+  atualizarUI();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function renderTrail() {
+function voltar() {
+  if (hist.length <= 1) return;
+  document.querySelector('.step.active').classList.remove('active');
+  hist.pop();
+  var anterior = hist[hist.length - 1];
+  document.getElementById(anterior).classList.add('active');
+  atualizarUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function atualizarUI() {
+  var atual = hist[hist.length - 1];
+
+  // barra de progresso
+  var step = stepWeight[atual] || 0;
+  document.getElementById('pbar').style.width = Math.round((step / 10) * 100) + '%';
+
+  // botão voltar — visível sempre que não estiver na home
+  var btnBack = document.getElementById('btn-back');
+  if (hist.length > 1) {
+    btnBack.classList.add('visible');
+  } else {
+    btnBack.classList.remove('visible');
+  }
+
+  // trilha de migalhas — mostra o caminho percorrido (excluindo a home)
+  var labels = {
+    's_inicio':'Avaliação inicial','s_variante':'Desvio?','s_oportunidade':'Variante?',
+    's_fogos':'Fogos','s_laada':'LAADA','s_engajado':'Engajado?',
+    's_degradacao':'Degradação?','s_tipo_deg':'SU ou Pel?','s_reserva_disp':'Reserva?',
+    's_penetrou':'Penetrou?','s_flanco':'Flanco?','s_desorg':'Desorganizar?','s_ca_tipo':'Tipo C Atq',
+    'fim_plano':'Manter plano','fim_variante':'Decisão de Execução',
+    'resultado_fogos':'Fogos','resultado_reforco':'Reforço','resultado_substituicao':'Substituição',
+    'resultado_bloqueio':'Bloqueio','resultado_retraimento':'Retraimento',
+    'resultado_ca_desaf':'C Atq Desaferramento','resultado_ca_rest':'C Atq Restabelecimento',
+    'resultado_ca_destruicao':'C Atq Destruição','resultado_ca_desorg':'C Atq Desorganização'
+  };
   var t = document.getElementById('trail');
   t.innerHTML = '';
-  hist.forEach(function(h) {
+  hist.slice(1).forEach(function(id) {
     var s = document.createElement('span');
     s.className = 'crumb';
-    s.textContent = h.label;
+    s.textContent = labels[id] || id;
     t.appendChild(s);
   });
 }
 
 function restart() {
-  hist = [];
-  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelector('.step.active').classList.remove('active');
+  hist = ['s_home'];
   document.getElementById('s_home').classList.add('active');
-  document.getElementById('trail').innerHTML = '';
-  document.getElementById('pbar').style.width = '0%';
+  atualizarUI();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -677,7 +708,7 @@ function fecharModalBtn() {
 }
 
 function fecharModal(e) {
-  if(e.target === document.getElementById('modal')) {
+  if (e.target === document.getElementById('modal')) {
     document.getElementById('modal').classList.remove('open');
   }
 }
